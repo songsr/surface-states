@@ -373,7 +373,7 @@
     hr_one_dim = 0.0_dp
        
     ! check imaginary part
-    write(*,'(1x,a,F12.6)') 'Maximum imaginary part of the real-space Hamiltonian: ',maxval(abs(aimag(ham_r)))
+!    write(*,'(1x,a,F12.6)') 'Maximum imaginary part of the real-space Hamiltonian: ',maxval(abs(aimag(ham_r)))
 
     ! select a subset of ham_r, where irvec is 0 along the Z lattice vector
 
@@ -448,11 +448,11 @@ loop_n1: do n1 = -irvec_max, irvec_max
 
 
     ! output maximum to check a decay of H as a function of lattice vector R
-    write(*,'(/1x,a78)') repeat('-',78)
-    write(*,'(1x,4x,a)') &
-                'Maximum real part of the real-space Hamiltonian at each lattice point'
-    write(*,'(1x,8x,a62)') repeat('-',62)
-    write(*,'(1x,11x,a,11x,a)') 'Lattice point R', 'Max |H_ij(R)|'
+!    write(*,'(/1x,a78)') repeat('-',78)
+!    write(*,'(1x,4x,a)') &
+!                'Maximum real part of the real-space Hamiltonian at each lattice point'
+!    write(*,'(1x,8x,a62)') repeat('-',62)
+!    write(*,'(1x,11x,a,11x,a)') 'Lattice point R', 'Max |H_ij(R)|'
     ! calculate number of units inside a principal layer
     num_pl = 0
     do n1=-irvec_max,irvec_max
@@ -465,10 +465,10 @@ loop_n1: do n1 = -irvec_max, irvec_max
        end if
        write(*,'(1x,9x,5x,I5,5x,12x,F12.6)') n1, hr_max 
     end do
-    write(*,'(1x,8x,a62)') repeat('-',62)
+!    write(*,'(1x,8x,a62)') repeat('-',62)
 
-        write(*,'(/1x,a,I6)') 'Number of unit cells inside the principal layer:',num_pl 
-        write(*,'(1x,a,I6)')  'Number of Wannier Functions inside the principal layer:',num_pl*num_wann 
+!        write(*,'(/1x,a,I6)') 'Number of unit cells inside the principal layer:',num_pl 
+!        write(*,'(1x,a,I6)')  'Number of Wannier Functions inside the principal layer:',num_pl*num_wann 
 
     ! apply hr_cutoff to each element inside the principal layer
     do n1 = -num_pl , num_pl
@@ -544,17 +544,17 @@ loop_n1: do n1 = -irvec_max, irvec_max
 
 
   
-       file_unit = 13
-       open(file_unit,file='wannier90_htB.dat',status='unknown',form='formatted',action='write')
+!       file_unit = 13
+!       open(file_unit,file='wannier90_htB.dat',status='unknown',form='formatted',action='write')
 
-       call io_date(cdate,ctime)
-       write(file_unit,*) 'written on '//cdate//' at '//ctime ! Date and time
-       write(file_unit,'(I6)') tran_num_bb
-       write(file_unit,'(6F12.6)') ((hB0(j,i),j=1,tran_num_bb),i=1,tran_num_bb)
-       write(file_unit,'(I6)') tran_num_bb
-       write(file_unit,'(6F12.6)') ((hB1(j,i),j=1,tran_num_bb),i=1,tran_num_bb)
+!       call io_date(cdate,ctime)
+!       write(file_unit,*) 'written on '//cdate//' at '//ctime ! Date and time
+!       write(file_unit,'(I6)') tran_num_bb
+!       write(file_unit,'(6F12.6)') ((hB0(j,i),j=1,tran_num_bb),i=1,tran_num_bb)
+!       write(file_unit,'(I6)') tran_num_bb
+!       write(file_unit,'(6F12.6)') ((hB1(j,i),j=1,tran_num_bb),i=1,tran_num_bb)
      
-       close(file_unit)
+!       close(file_unit)
  
  
 
@@ -607,33 +607,9 @@ loop_n1: do n1 = -irvec_max, irvec_max
 
 
 
- !   qc_unit = 14
- !   open(qc_unit,file= '1_qc.dat',status='unknown', &
- !        form='formatted',action='write')
- !   write(qc_unit,*) '## written on '//cdate//' at '//ctime ! Date and time
-
- !   dos_unit = 15
- !   open(dos_unit,file='surface_dos.dat',status='unknown', &
- !        form='formatted',action='write') 
- !   write(dos_unit,*) '## written on '//cdate//' at '//ctime ! Date and time
-
     !   set up the layer hamiltonians
 
-
-
-    !   loop over the energies
-
- !   n_e = floor((tran_win_max-tran_win_min)/tran_energy_step)+1
-
-!    write(*,'(/1x,a)',advance='no') 'Calculating quantum&
-!        & conductance and density of states...'
-
- !   do n=1,n_e
- !      e_scan = tran_win_min + real(n-1,dp)*tran_energy_step
-
-!       if (mod(n,nint(0.1*n_e)).eq.0) write(*,'(a)',advance='no') '.' 
- 
-       ! compute conductance according to Fisher and Lee
+       ! compute according to Fisher and Lee
        ! retarded Green
 
        e_scan_cmp = e_scan+eta 
@@ -670,21 +646,15 @@ loop_n1: do n1 = -irvec_max, irvec_max
        do i=1,tran_num_bb
           qc = qc + real(c1(i,i),dp)
        end do
- !      write(qc_unit,'(f12.6,f15.6)') e_scan, qc
+
 
        dos = 0.0_dp
        do i=1,tran_num_bb
           dos = dos - aimag(g_B(i,i))
        end do
        dos = dos / pi
-!       write(dos_unit,'(f12.6,f15.6)') e_scan, dos
 
-!    end do
 
-!    write(*,'(a/)') ' done'
-
- !   close(qc_unit)
- !   close(dos_unit)
 
     deallocate (c1,stat=ierr)
     if (ierr/=0) call io_error('Error in deallocating c1 in tran_bulk')
@@ -706,8 +676,6 @@ loop_n1: do n1 = -irvec_max, irvec_max
     if (ierr/=0) call io_error('Error in deallocating tott in tran_bulk')
     deallocate (tot,stat=ierr)
     if (ierr/=0) call io_error('Error in deallocating tot in tran_bulk')
-
-
 
 
     return
@@ -734,11 +702,8 @@ loop_n1: do n1 = -irvec_max, irvec_max
     complex(kind=dp), intent(in) ::  e_scan_cmp
     complex(kind=dp), intent(out) ::  tot(nxx,nxx)
     complex(kind=dp), intent(out) ::  tott(nxx,nxx)
-!    real(kind=dp), intent(in) :: h_00(nxx,nxx)
-!    real(kind=dp), intent(in) :: h_01(nxx,nxx)
-
-      complex(kind=dp), intent(in) :: h_00(nxx,nxx)
-      complex(kind=dp), intent(in) :: h_01(nxx,nxx)
+    complex(kind=dp), intent(in) :: h_00(nxx,nxx)
+    complex(kind=dp), intent(in) :: h_01(nxx,nxx)
     
     !
     integer  :: ierr, info
@@ -937,11 +902,11 @@ loop_n1: do n1 = -irvec_max, irvec_max
     integer, intent(in) :: igreen
     integer, intent(in) :: invert
     real(kind=dp),     intent(in) :: e_scan 
-!    real(kind=dp),     intent(in) :: h_00(nxx,nxx), h_01(nxx,nxx)
+
     complex(kind=dp),  intent(in) :: tot(nxx,nxx),tott(nxx,nxx)
     complex(kind=dp), intent(out) :: g(nxx,nxx)
 
-      complex(kind=dp),     intent(in) :: h_00(nxx,nxx), h_01(nxx,nxx)
+    complex(kind=dp),     intent(in) :: h_00(nxx,nxx), h_01(nxx,nxx)
 
 
     integer :: ierr, info
