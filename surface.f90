@@ -37,24 +37,15 @@
   integer:: num_wann
   integer:: mp_grid(3)
   real(kind=dp) :: dist_cutoff
-!  character(len=20) :: dist_cutoff_mode
-!  character(len=20) :: one_dim_axis
   real(kind=dp) :: hr_cutoff
   real(kind=dp) :: fermi_energy
   real(kind=dp) :: tran_win_min
   real(kind=dp) :: tran_win_max
   real(kind=dp) :: tran_energy_step
-!  real(kind=dp) :: translation_centre_frac(3)
- ! real(kind=dp), allocatable :: kpt_latt(:,:) !kpoints in lattice vecs
   real(kind=dp) :: real_lattice(3,3)
 
 
-!  integer :: num_kpts
-!  real(kind=dp) :: recip_lattice(3,3)
-!  real(kind=dp) :: cell_volume
-!  real(kind=dp) :: real_metric(3,3)
-!  real(kind=dp) :: recip_metric(3,3)
-  
+
  
   ! Hamiltonian matrix in WF representation
   !
@@ -108,22 +99,17 @@
   complex(kind=dp), allocatable :: hB0(:,:)
   complex(kind=dp), allocatable :: hB1(:,:)
 
-!  integer stdout
+!   integer stdout
     integer ierr
-  integer file_unit
+    integer file_unit
 
 
-
-
-
-
-!    implicit none
 
 
     real(kind=dp) k    
- real(kind=dp) e_scan
- integer n,ikp,n_e
- integer i,j
+    real(kind=dp) e_scan
+    integer n,ikp,n_e
+    integer i,j
 
      real(dp), allocatable :: omega(:)
      
@@ -132,8 +118,8 @@
           real(dp), allocatable :: dos(:,:)
 
      integer knv2
-      character*12 :: fname='input.dat'
-           logical ::  exists
+     character*12 :: fname='input.dat'
+     logical ::  exists
      
      
      knv2=299
@@ -227,8 +213,10 @@
           call get_ht()
 
           call surface_dos(e_scan,dos(ikp,n))
-          write(102, '(3f16.8)') k, e_scan, dos(ikp, n)          
+          write(102, '(3f16.8)') k, e_scan, dos(ikp, n)   
+          deallocatable(hr_one_dim, hB0, hB1)
       enddo
+      write(102,*)
     end do
     
     close(102)
@@ -267,9 +255,6 @@
     allocate(ham_r(num_wann,num_wann,nrpts),stat=ierr)
     if (ierr/=0) call io_error('Error in allocating ham_r in hamiltonian_setup')
     ham_r=cmplx_0
-!    allocate(ham_k(num_wann,num_wann,num_kpts),stat=ierr)
-!    if (ierr/=0) call io_error('Error in allocating ham_k in hamiltonian_setup')
- !   ham_k=cmplx_0
 
     !
     allocate(wannier_centres_translated(3,num_wann),stat=ierr)
